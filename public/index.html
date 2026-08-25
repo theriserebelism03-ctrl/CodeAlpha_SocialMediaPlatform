@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Social Media Platform</title>
+    <style>
+      :root {
+        --bg-1: #eff6ff;
+        --bg-2: #f8fafc;
+        --panel: rgba(255, 255, 255, 0.8);
+        --panel-strong: #ffffff;
+        --primary: #4f46e5;
+        --primary-dark: #4338ca;
+        --primary-soft: #eef2ff;
+        --success: #16a34a;
+        --text: #0f172a;
+        --muted: #64748b;
+        --border: rgba(148, 163, 184, 0.25);
+        --shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: radial-gradient(circle at top left, #eef2ff, #f8fafc 35%, #f1f5f9 100%);
+        color: var(--text);
+      }
+
+      button,
+      input,
+      textarea {
+        font: inherit;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 30;
+        backdrop-filter: blur(18px);
+        background: rgba(255, 255, 255, 0.7);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .topbar {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1rem 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .brand-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+      }
+
+      .brand-mark {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--primary), #7c3aed);
+        color: white;
+        font-weight: 800;
+        box-shadow: 0 12px 25px rgba(79, 70, 229, 0.25);
+      }
+
+      .brand {
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        color: var(--text);
+      }
+
+      .auth-area {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        flex-wrap: wrap;
+      }
+
+      .user-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.7rem 0.9rem;
+        border-radius: 999px;
+        background: rgba(79, 70, 229, 0.08);
+        border: 1px solid rgba(79, 70, 229, 0.15);
+        color: var(--primary-dark);
+        font-weight: 700;
+      }
+
+      .user-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--success);
+        box-shadow: 0 0 0 5px rgba(22, 163, 74, 0.16);
+      }
+
+      .auth-forms {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .auth-form {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.35rem 0.4rem;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.8);
+      }
+
+      .auth-form input {
+        min-width: 140px;
+        border: 1px solid rgba(148, 163, 184, 0.4);
+        background: rgba(248, 250, 252, 0.9);
+        border-radius: 10px;
+        padding: 0.7rem 0.8rem;
+        outline: none;
+        transition: border 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .auth-form input:focus,
+      textarea:focus,
+      .comment-form input:focus {
+        border-color: rgba(79, 70, 229, 0.45);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+      }
+
+      button {
+        border: none;
+        border-radius: 12px;
+        padding: 0.8rem 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+      }
+
+      .primary-btn {
+        background: linear-gradient(135deg, var(--primary), #7c3aed);
+        color: white;
+        box-shadow: 0 12px 25px rgba(79, 70, 229, 0.2);
+      }
+
+      .secondary-btn {
+        background: var(--primary-soft);
+        color: var(--primary);
+      }
+
+      .logout-btn {
+        background: rgba(239, 68, 68, 0.1);
+        color: #b91c1c;
+      }
+
+      .app-shell {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1.25rem 3rem;
+      }
+
+      .feed-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.65fr) minmax(260px, 0.8fr);
+        gap: 1.5rem;
+        align-items: start;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        backdrop-filter: blur(8px);
+        border-radius: 24px;
+        box-shadow: var(--shadow);
+      }
+
+      .composer {
+        padding: 1.2rem 1.3rem;
+        margin-bottom: 1.2rem;
+      }
+
+      .composer-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+        margin-bottom: 0.8rem;
+      }
+
+      .eyebrow {
+        margin: 0;
+        color: var(--primary);
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .composer h2,
+      .sidebar h3 {
+        margin: 0.2rem 0 0;
+        font-size: 1.6rem;
+      }
+
+      .post-status {
+        background: rgba(79, 70, 229, 0.08);
+        color: var(--primary);
+        border-radius: 999px;
+        padding: 0.45rem 0.75rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+
+      textarea {
+        width: 100%;
+        border: 1px solid rgba(148, 163, 184, 0.4);
+        border-radius: 18px;
+        min-height: 140px;
+        padding: 1rem 1.1rem;
+        background: rgba(248, 250, 252, 0.85);
+        resize: vertical;
+        font-size: 1rem;
+        line-height: 1.6;
+      }
+
+      .composer-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+        margin-top: 1rem;
+      }
+
+      .composer-note {
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      .posts-feed {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        max-height: calc(100vh - 320px);
+        overflow-y: auto;
+        padding-right: 0.2rem;
+      }
+
+      .post-card {
+        padding: 1.2rem 1.15rem;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.04);
+      }
+
+      .post-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+        margin-bottom: 0.9rem;
+      }
+
+      .post-user-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+      }
+
+      .avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 0.92rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #e0e7ff, #ddd6fe);
+        color: var(--primary-dark);
+      }
+
+      .post-author {
+        font-weight: 800;
+      }
+
+      .post-time {
+        color: var(--muted);
+        font-size: 0.75rem;
+      }
+
+      .post-content {
+        margin: 0 0 1rem;
+        font-size: 1.04rem;
+        line-height: 1.7;
+        white-space: pre-wrap;
+        color: var(--text);
+      }
+
+      .post-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+      }
+
+      .like-btn,
+      .toggle-comments-btn {
+        background: #f8fafc;
+        color: var(--text);
+        border: 1px solid var(--border);
+      }
+
+      .comment-section {
+        border-top: 1px solid var(--border);
+        padding-top: 1rem;
+      }
+
+      .comment-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        margin-bottom: 0.8rem;
+      }
+
+      .comment-item {
+        background: rgba(248, 250, 252, 0.9);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 0.8rem 0.85rem;
+      }
+
+      .comment-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.6rem;
+        margin-bottom: 0.35rem;
+        color: var(--muted);
+        font-size: 0.75rem;
+      }
+
+      .comment-form {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+
+      .comment-form input {
+        flex: 1;
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        border-radius: 12px;
+        background: rgba(248, 250, 252, 0.95);
+        padding: 0.8rem 0.9rem;
+      }
+
+      .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .sidebar-card {
+        padding: 1.2rem 1.1rem;
+      }
+
+      .status-box {
+        background: linear-gradient(135deg, #edf2ff, #f8fafc);
+        border: 1px solid rgba(99, 102, 241, 0.18);
+        border-radius: 18px;
+        padding: 1rem;
+        color: var(--primary-dark);
+        font-weight: 600;
+        line-height: 1.6;
+      }
+
+      .mini-list {
+        list-style: none;
+        padding: 0;
+        margin: 1rem 0 0;
+        display: grid;
+        gap: 0.7rem;
+      }
+
+      .mini-list li {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        color: var(--muted);
+      }
+
+      .mini-list li::before {
+        content: '•';
+        color: var(--primary);
+        font-size: 1.5rem;
+        line-height: 0.7;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      textarea:disabled,
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      @media (max-width: 860px) {
+        .topbar {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .feed-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .auth-area,
+        .auth-forms,
+        .auth-form,
+        .comment-form,
+        .composer-actions {
+          width: 100%;
+        }
+
+        .auth-form {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .comment-form,
+        .composer-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        button {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="topbar">
+        <div class="brand-wrap">
+          <div class="brand-mark">S</div>
+          <div class="brand">SocialHub</div>
+        </div>
+
+        <div class="auth-area">
+          <div id="userBadge" class="user-badge hidden">
+            <span class="user-dot"></span>
+            <span>Hi, <strong id="usernameLabel"></strong></span>
+          </div>
+
+          <div class="auth-forms">
+            <form id="registerForm" class="auth-form">
+              <input type="text" id="registerUsername" placeholder="Username" required />
+              <input type="password" id="registerPassword" placeholder="Password" required />
+              <button type="submit" class="primary-btn">Register</button>
+            </form>
+
+            <form id="loginForm" class="auth-form">
+              <input type="text" id="loginUsername" placeholder="Username" required />
+              <input type="password" id="loginPassword" placeholder="Password" required />
+              <button type="submit" class="secondary-btn">Login</button>
+            </form>
+
+            <button id="logoutBtn" class="logout-btn hidden">Logout</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <div class="feed-layout">
+        <section>
+          <div class="composer panel">
+            <div class="composer-header">
+              <div>
+                <p class="eyebrow">Share update</p>
+                <h2>What’s happening?</h2>
+              </div>
+              <span id="postStatus" class="post-status">Guest mode</span>
+            </div>
+
+            <form id="postForm">
+              <textarea id="postContent" placeholder="Tell your community something interesting..." maxlength="500" required disabled></textarea>
+              <div class="composer-actions">
+                <span id="postHint" class="composer-note">Login to share a post.</span>
+                <button id="postSubmitBtn" type="submit" class="primary-btn" disabled>Post update</button>
+              </div>
+            </form>
+          </div>
+
+          <div id="postsContainer" class="posts-feed" aria-live="polite"></div>
+        </section>
+
+        <aside class="sidebar">
+          <div class="sidebar-card panel">
+            <p class="eyebrow">Community pulse</p>
+            <h3>Welcome back</h3>
+            <div class="status-box">
+              Stay connected, share ideas, and keep the conversation moving.
+            </div>
+            <ul class="mini-list">
+              <li>Live social updates</li>
+              <li>Instant likes</li>
+              <li>Quick conversations</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <script>
+      const state = {
+        token: localStorage.getItem('token') || '',
+        user: JSON.parse(localStorage.getItem('user') || 'null'),
+      };
+
+      const authForms = {
+        login: document.getElementById('loginForm'),
+        register: document.getElementById('registerForm'),
+      };
+
+      const postForm = document.getElementById('postForm');
+      const postContentInput = document.getElementById('postContent');
+      const postSubmitBtn = document.getElementById('postSubmitBtn');
+      const postStatus = document.getElementById('postStatus');
+      const postHint = document.getElementById('postHint');
+      const postsContainer = document.getElementById('postsContainer');
+      const userBadge = document.getElementById('userBadge');
+      const usernameLabel = document.getElementById('usernameLabel');
+      const logoutBtn = document.getElementById('logoutBtn');
+
+      function escapeHtml(value = '') {
+        return String(value)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/\"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      function updateAuthUI() {
+        const isLoggedIn = Boolean(state.token && state.user);
+
+        authForms.login.classList.toggle('hidden', isLoggedIn);
+        authForms.register.classList.toggle('hidden', isLoggedIn);
+        logoutBtn.classList.toggle('hidden', !isLoggedIn);
+
+        if (isLoggedIn) {
+          userBadge.classList.remove('hidden');
+          usernameLabel.textContent = state.user.username;
+          postStatus.textContent = 'Posting enabled';
+          postHint.textContent = 'Share something with your community.';
+          postContentInput.disabled = false;
+          postSubmitBtn.disabled = false;
+        } else {
+          userBadge.classList.add('hidden');
+          postStatus.textContent = 'Guest mode';
+          postHint.textContent = 'Login to share a post.';
+          postContentInput.disabled = true;
+          postSubmitBtn.disabled = true;
+        }
+      }
+
+      function setAuthState(token, user) {
+        state.token = token;
+        state.user = user;
+
+        if (token && user) {
+          localStorage.setItem('token', token);
+          localStorage.setItem('user', JSON.stringify(user));
+        } else {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+        }
+
+        updateAuthUI();
+      }
+
+      async function apiRequest(url, options = {}) {
+        const headers = {
+          'Content-Type': 'application/json',
+          ...(options.headers || {}),
+        };
+
+        if (state.token) {
+          headers.Authorization = `Bearer ${state.token}`;
+        }
+
+        const response = await fetch(url, {
+          ...options,
+          headers,
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Request failed');
+        }
+
+        return data;
+      }
+
+      async function handleRegister(event) {
+        event.preventDefault();
+        const username = document.getElementById('registerUsername').value.trim();
+        const password = document.getElementById('registerPassword').value;
+
+        try {
+          const data = await apiRequest('/api/register', {
+            method: 'POST',
+            body: JSON.stringify({ username, password }),
+          });
+
+          setAuthState(data.token, data.user);
+          authForms.register.reset();
+          await fetchPosts();
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+
+      async function handleLogin(event) {
+        event.preventDefault();
+        const username = document.getElementById('loginUsername').value.trim();
+        const password = document.getElementById('loginPassword').value;
+
+        try {
+          const data = await apiRequest('/api/login', {
+            method: 'POST',
+            body: JSON.stringify({ username, password }),
+          });
+
+          setAuthState(data.token, data.user);
+          authForms.login.reset();
+          await fetchPosts();
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+
+      async function fetchPosts() {
+        try {
+          const posts = await apiRequest('/api/posts', { method: 'GET' });
+          renderPosts(posts);
+        } catch (error) {
+          postsContainer.innerHTML = '<div class="post-card"><p>Unable to load posts right now.</p></div>';
+        }
+      }
+
+      async function handleCreatePost(event) {
+        event.preventDefault();
+
+        if (!state.token || !state.user) {
+          alert('Please log in to create a post.');
+          return;
+        }
+
+        const content = postContentInput.value.trim();
+        if (!content) {
+          alert('Post content cannot be empty.');
+          return;
+        }
+
+        try {
+          await apiRequest('/api/posts', {
+            method: 'POST',
+            body: JSON.stringify({ content }),
+          });
+
+          postContentInput.value = '';
+          await fetchPosts();
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+
+      async function handleLike(postId) {
+        if (!state.token || !state.user) {
+          alert('Please log in to like posts.');
+          return;
+        }
+
+        try {
+          const result = await apiRequest(`/api/posts/${postId}/like`, {
+            method: 'POST',
+          });
+
+          const likeButton = document.querySelector(`[data-like-id="${postId}"]`);
+          if (likeButton) {
+            likeButton.textContent = `Like (${result.likes})`;
+          }
+
+          await fetchPosts();
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+
+      async function handleCommentSubmit(event) {
+        event.preventDefault();
+
+        if (!state.token || !state.user) {
+          alert('Please log in to comment.');
+          return;
+        }
+
+        const form = event.currentTarget;
+        const postId = Number(form.dataset.postId);
+        const input = form.querySelector('input[name="comment"]');
+        const content = input.value.trim();
+
+        if (!content) {
+          alert('Comment cannot be empty.');
+          return;
+        }
+
+        try {
+          await apiRequest(`/api/posts/${postId}/comments`, {
+            method: 'POST',
+            body: JSON.stringify({ content }),
+          });
+
+          input.value = '';
+          await fetchPosts();
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+
+      function renderPosts(posts) {
+        if (!posts || posts.length === 0) {
+          postsContainer.innerHTML = '<div class="post-card"><p>No posts yet. Be the first to share something.</p></div>';
+          return;
+        }
+
+        postsContainer.innerHTML = posts
+          .map((post) => {
+            const commentsHtml = (post.comments || [])
+              .map((comment) => {
+                const author = comment.author_name || comment.author?.username || 'User';
+                return `
+                  <div class="comment-item">
+                    <div class="comment-meta">
+                      <strong>${escapeHtml(author)}</strong>
+                      <span>${new Date(comment.created_at).toLocaleString()}</span>
+                    </div>
+                    <div>${escapeHtml(comment.content || '')}</div>
+                  </div>
+                `;
+              })
+              .join('');
+
+            return `
+              <article class="post-card">
+                <div class="post-header">
+                  <div class="post-user-wrap">
+                    <div class="avatar">${escapeHtml((post.author?.username || 'U').charAt(0).toUpperCase())}</div>
+                    <div>
+                      <div class="post-author">${escapeHtml(post.author?.username || post.author_name || 'Unknown')}</div>
+                      <div class="post-time">${new Date(post.created_at).toLocaleString()}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <p class="post-content">${escapeHtml(post.content || '')}</p>
+
+                <div class="post-actions">
+                  <button type="button" class="like-btn" data-like-id="${post.id}">Like (${post.likes || 0})</button>
+                  <button type="button" class="toggle-comments-btn" data-toggle-id="${post.id}">Comments (${(post.comments || []).length})</button>
+                </div>
+
+                <div class="comment-section hidden" data-comments-panel="${post.id}">
+                  <div class="comment-list">${commentsHtml || '<div class="comment-item">No comments yet.</div>'}</div>
+                  <form class="comment-form" data-post-id="${post.id}">
+                    <input type="text" name="comment" placeholder="Write a comment..." maxlength="250" />
+                    <button type="submit" class="secondary-btn">Comment</button>
+                  </form>
+                </div>
+              </article>
+            `;
+          })
+          .join('');
+
+        document.querySelectorAll('.like-btn').forEach((button) => {
+          button.addEventListener('click', () => handleLike(Number(button.dataset.likeId)));
+        });
+
+        document.querySelectorAll('.toggle-comments-btn').forEach((button) => {
+          button.addEventListener('click', () => {
+            const panel = document.querySelector(`[data-comments-panel="${button.dataset.toggleId}"]`);
+            if (panel) {
+              panel.classList.toggle('hidden');
+            }
+          });
+        });
+
+        document.querySelectorAll('.comment-form').forEach((form) => {
+          form.addEventListener('submit', handleCommentSubmit);
+        });
+      }
+
+      authForms.register.addEventListener('submit', handleRegister);
+      authForms.login.addEventListener('submit', handleLogin);
+      postForm.addEventListener('submit', handleCreatePost);
+      logoutBtn.addEventListener('click', () => setAuthState('', null));
+
+      updateAuthUI();
+      fetchPosts();
+    </script>
+  </body>
+</html>
